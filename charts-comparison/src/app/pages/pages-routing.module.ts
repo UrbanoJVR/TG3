@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { ChartsjsComponent } from './chartsjs/chartsjs.component';
 import { EchartsComponent } from './echarts/echarts.component';
+import { LiveComponent } from './live/live.component';
+
 
 const routes: Routes = [{
   path: '',
@@ -16,6 +18,9 @@ const routes: Routes = [{
     {
       path: 'echarts',
       component: EchartsComponent,
+    },
+    {
+      path: 'live',
     },
     {
       path: '',
@@ -35,4 +40,6 @@ export class PagesRoutingModule {
 export const routedComponents = [
   EchartsComponent,
   ChartsjsComponent,
+  LiveComponent,
+    
 ];

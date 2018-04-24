@@ -12,5 +12,10 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'nb-bar-chart',
     link: '/pages/echarts',
   },
+  {
+    title: 'Live Charts',
+    icon: 'nb-flame-circled',
+    link: '/pages/live',
+  },  
 
 ];
