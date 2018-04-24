@@ -11,8 +11,7 @@ import {LiveComponent} from './live.component';
     NgxEchartsModule,
     ThemeModule,
   ],
-  declarations: [
-    LiveComponent,
+  declarations: [LiveComponent,
   ]
 })
 export class LiveModule { }

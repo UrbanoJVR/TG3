@@ -23,7 +23,7 @@ const PAGES_COMPONENTS = [
   ],
   declarations: [
     ...PAGES_COMPONENTS,
-    LiveComponent,
+    
   ],
 })
 export class PagesModule {

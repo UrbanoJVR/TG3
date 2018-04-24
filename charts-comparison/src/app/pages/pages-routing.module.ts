@@ -21,6 +21,7 @@ const routes: Routes = [{
     },
     {
       path: 'live',
+      component: LiveComponent,
     },
     {
       path: '',
