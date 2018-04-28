@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { ThemeModule } from '../../@theme/theme.module';
 
-import {LiveComponent} from './live.component';
+import { LiveComponent } from './live.component';
 
 @NgModule({
   imports: [
