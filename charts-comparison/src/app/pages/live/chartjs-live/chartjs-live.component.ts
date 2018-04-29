@@ -6,7 +6,7 @@ import { LiveService } from '../service/live.service';
   selector: 'chartjs-live',
   templateUrl: './chartjs-live.component.html',
   styleUrls: ['./chartjs-live.component.scss'],
-  providers: [LiveService],
+  providers: [LiveService,],
 })
 export class ChartjsLiveComponent implements OnInit {
 
@@ -15,7 +15,7 @@ export class ChartjsLiveComponent implements OnInit {
   themeSubscription: any;
 
   constructor(private theme: NbThemeService,
-    private liveService: LiveService) {
+    private liveService: LiveService,) {
 
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
@@ -27,17 +27,17 @@ export class ChartjsLiveComponent implements OnInit {
         datasets: [{
           data: [],
           label: 'USD',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.2),
           borderColor: colors.primary,
         }, {
           data: [],
           label: 'EUR',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.3),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.2),
           borderColor: colors.danger,
         }, {
           data: [],
           label: 'GBP',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.3),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.2),
           borderColor: colors.info,
         },
         ],
@@ -45,7 +45,7 @@ export class ChartjsLiveComponent implements OnInit {
 
       this.options = {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         scales: {
           xAxes: [
             {
