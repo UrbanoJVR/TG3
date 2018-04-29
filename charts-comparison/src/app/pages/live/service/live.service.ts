@@ -1,14 +1,24 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClientModule, HttpClient, HttpResponse } from '@angular/common/http'
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class LiveService {
 
   constructor(private http: HttpClient) { }
 
-  getBitcoinPrice() {
-    let url = 'https://api.coindesk.com/v1/bpi/currentprice.json';
+  getBitcoinUSDPrice() {
+    const apiURL = 'https://api.coindesk.com/v1/bpi/historical/close.json?currency=USD';
+    return this.http.get(apiURL);
+  }
 
-    this.http.get(url).map((res: Response) => res.json());
+  getBitcoinEURPrice() {
+    const apiURL = 'https://api.coindesk.com/v1/bpi/historical/close.json?currency=EUR';
+    return this.http.get(apiURL);
+  }
+
+  getBitcoinGBPPrice() {
+    const apiURL = 'https://api.coindesk.com/v1/bpi/historical/close.json?currency=GBP';
+    return this.http.get(apiURL);
   }
 }
