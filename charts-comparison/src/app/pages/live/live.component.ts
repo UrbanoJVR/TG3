@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'live',
@@ -7,14 +7,6 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 })
 export class LiveComponent {
 
-  constructor(private changeDetectorRef: ChangeDetectorRef) {
-    // Para detectar cambios en la vista cada segundo
-    this.changeDetectorRef.detach();
-    setInterval(() => {
-      if (!this.changeDetectorRef['destroyed']) {
-        this.changeDetectorRef.detectChanges();
-      }
-    }, 1000);
-  }
+  constructor() { }
 
 }

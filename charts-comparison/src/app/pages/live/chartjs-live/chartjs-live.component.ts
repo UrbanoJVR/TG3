@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
 import { LiveService } from '../service/live.service';
 
@@ -15,7 +15,16 @@ export class ChartjsLiveComponent implements OnInit {
   themeSubscription: any;
 
   constructor(private theme: NbThemeService,
-    private liveService: LiveService,) {
+    private liveService: LiveService, 
+    private changeDetectorRef: ChangeDetectorRef) {
+
+    // Para detectar cambios en la vista cada segundo
+    this.changeDetectorRef.detach();
+    setInterval(() => {
+      if (!this.changeDetectorRef['destroyed']) {
+        this.changeDetectorRef.detectChanges();
+      }
+    }, 1000);
 
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
@@ -27,17 +36,17 @@ export class ChartjsLiveComponent implements OnInit {
         datasets: [{
           data: [],
           label: 'USD',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.2),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.1),
           borderColor: colors.primary,
         }, {
           data: [],
           label: 'EUR',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.2),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.1),
           borderColor: colors.danger,
         }, {
           data: [],
           label: 'GBP',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.2),
+          backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.1),
           borderColor: colors.info,
         },
         ],

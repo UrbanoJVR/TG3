@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { LiveService } from '../service/live.service';
 
@@ -13,144 +13,154 @@ export class EchartsLiveComponent {
   data: any;
   options: any = {};
   themeSubscription: any;
+  labels: any[] = [];
+  USDdata: any[] = [];
+  EURdata: any[] = [];
+  GBPdata: any[] = [];
 
-  constructor(private theme: NbThemeService,
-    private liveService: LiveService,) {}
+  constructor(private theme: NbThemeService, private liveService: LiveService, private changeDetectorRef: ChangeDetectorRef, ) {
 
-    ngAfterViewInit() {
-      this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-  
-        const colors: any = config.variables;
-        const echarts: any = config.variables.echarts;   
-     
-        this.options = {
-          title:{
-            text: "Live Echarts"
-          },
-          backgroundColor: echarts.bg,
-          color: [colors.danger, colors.primary, colors.info],
-          tooltip: {
-            trigger: 'item',
-            formatter: '{a} <br/>{b} : {c}',
-          },
-          legend: {
-            center: 'center',
-            data: ['USD', 'EUR', 'GBP'],
-            textStyle: {
-              color: echarts.textColor,
-            },
-          },
-          xAxis: [
-            {
-              type: 'category',
-              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
-                (res: any) => {
-                  let obj = res.bpi;
-                  Object.keys(obj);
-                  for (let i in obj) {
-                    var euros = this.data.datasets[1].data.push(obj[i]);
-                  }
-                  return euros;
-                }
-              );
-            }),
-            
-              axisTick: {
-                alignWithLabel: true,
-              },
-              axisLine: {
-                lineStyle: {
-                  color: echarts.axisLineColor,
-                },
-              },
-              axisLabel: {
-                textStyle: {
-                  color: echarts.textColor,
-                },
-              },
-            },
-          ],
-          yAxis: [
-            {
-              type: 'log',
-              axisLine: {
-                lineStyle: {
-                  color: echarts.axisLineColor,
-                },
-              },
-              splitLine: {
-                lineStyle: {
-                  color: echarts.splitLineColor,
-                },
-              },
-              axisLabel: {
-                textStyle: {
-                  color: echarts.textColor,
-                },
-              },
-            },
-          ],
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true,
-          },
-          series: [
-            {
-              name: 'USD',
-              type: 'line',
-              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
-                (res: any) => {
-                  let obj = res.bpi;
-                  Object.keys(obj);
-                  for (let i in obj) {
-                    var dolars = this.data.datasets[1].data.push(obj[i]);
-                  }
-                  return dolars;
-                }
-              );
-            }),
-            },
-            {
-              name: 'EUR',
-              type: 'line',
-              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
-                (res: any) => {
-                  let obj = res.bpi;
-                  Object.keys(obj);
-                  for (let i in obj) {
-                    var euros = this.data.datasets[1].data.push(obj[i]);
-                  }
-                  return euros;
-                }
-              );
-            }),
-            },
-            {
-              name: 'GBP',
-              type: 'line',
-              data: (function (){ this.liveService.getBitcoinGBPPrice().subscribe(
-                (res: any) => {
-                  let obj = res.bpi;
-                  Object.keys(obj);
-                  for (let i in obj) {
-                    var libras = this.data.datasets[2].data.push(obj[i]);
-                  }
-                  return libras;
-                }
-              );
-            }),
-            },
-          
-          ],
-        };
-      });
-    }     
+    // Para detectar cambios en la vista cada segundo
+    this.changeDetectorRef.detach();
+    setInterval(() => {
+      if (!this.changeDetectorRef['destroyed']) {
+        this.changeDetectorRef.detectChanges();
+        this.ngAfterViewInit();
+      }
+    }, 1000);
 
-    ngOnDestroy(): void {
-      this.themeSubscription.unsubscribe();
-    }
+    this.liveService.getBitcoinUSDPrice().subscribe(
+      (res: any) => {
+        let obj = res.bpi;
+        Object.keys(obj);
+        for (let i in obj) {
+          // Introducimos los días en el eje X
+          this.labels.push(i);
+          // Introdudimos los datos del valor de los dolares
+          this.USDdata.push(obj[i]);
+        }
+        // Llamamos a la función para recargar la vista
+        this.ngAfterViewInit();
+      }
+    );
+
+    this.liveService.getBitcoinEURPrice().subscribe(
+      (res: any) => {
+        let obj = res.bpi;
+        Object.keys(obj);
+        for (let i in obj) {
+          this.EURdata.push(obj[i]);
+        }
+        this.ngAfterViewInit();
+      }
+    );
+
+    this.liveService.getBitcoinGBPPrice().subscribe(
+      (res: any) => {
+        let obj = res.bpi;
+        Object.keys(obj);
+        for (let i in obj) {
+          this.GBPdata.push(obj[i]);
+        }
+        this.ngAfterViewInit();
+      }
+    );
+  }
+
+  ngAfterViewInit() {
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+
+      const colors: any = config.variables;
+      const echarts: any = config.variables.echarts;
+
+      this.options = {
+        backgroundColor: echarts.bg,
+        color: [colors.danger, colors.primary, colors.info],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c}',
+        },
+        legend: {
+          left: 'center',
+          data: ['USD', 'EUR', 'GBP'],
+          textStyle: {
+            color: echarts.textColor,
+          },
+        },
+        xAxis: [
+          {
+            type: 'category',
+            name: 'Last 31 days',
+            nameLocation: 'center',
+            nameGap: 25,
+            data: this.labels,
+            axisTick: {
+              alignWithLabel: true,
+            },
+            axisLine: {
+              lineStyle: {
+                color: echarts.axisLineColor,
+              },
+            },
+            axisLabel: {
+              textStyle: {
+                color: echarts.textColor,
+              },
+            },
+          },
+        ],
+        yAxis: [
+          {
+            type: 'log',
+            name: 'Price',
+            nameLocation: 'center',
+            nameGap: 25,
+            axisLine: {
+              lineStyle: {
+                color: echarts.axisLineColor,
+              },
+            },
+            splitLine: {
+              lineStyle: {
+                color: echarts.splitLineColor,
+              },
+            },
+            axisLabel: {
+              textStyle: {
+                color: echarts.textColor,
+              },
+            },
+          },
+        ],
+        grid: {
+          left: '2%',
+          right: '2%',
+          containLabel: true,
+        },
+        series: [
+          {
+            name: 'USD',
+            type: 'line',
+            data: this.USDdata,
+          },
+          {
+            name: 'EUR',
+            type: 'line',
+            data: this.EURdata,
+          },
+          {
+            name: 'GBP',
+            type: 'line',
+            data: this.GBPdata,
+          },
+        ],
+      };
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.themeSubscription.unsubscribe();
+  }
 
 }
 
