@@ -10,6 +10,7 @@ import { LiveService } from '../service/live.service';
 })
 export class EchartsLiveComponent {
 
+  data: any;
   options: any = {};
   themeSubscription: any;
 
@@ -20,8 +21,8 @@ export class EchartsLiveComponent {
       this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
   
         const colors: any = config.variables;
-        const echarts: any = config.variables.echarts;
-  
+        const echarts: any = config.variables.echarts;   
+     
         this.options = {
           backgroundColor: echarts.bg,
           color: [colors.danger, colors.primary, colors.info],
@@ -39,7 +40,18 @@ export class EchartsLiveComponent {
           xAxis: [
             {
               type: 'category',
-              data: ['2018-04-20', '2018-04-21', '2018-04-22'],
+              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
+                (res: any) => {
+                  let obj = res.bpi;
+                  Object.keys(obj);
+                  for (let i in obj) {
+                    var euros = this.data.datasets[1].data.push(obj[i]);
+                  }
+                  return euros;
+                }
+              );
+            }),
+            
               axisTick: {
                 alignWithLabel: true,
               },
@@ -85,23 +97,54 @@ export class EchartsLiveComponent {
             {
               name: 'USD',
               type: 'line',
-              data: [1, 3, 9],
+              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
+                (res: any) => {
+                  let obj = res.bpi;
+                  Object.keys(obj);
+                  for (let i in obj) {
+                    var dolars = this.data.datasets[1].data.push(obj[i]);
+                  }
+                  return dolars;
+                }
+              );
+            }),
             },
             {
               name: 'EUR',
               type: 'line',
-              data: [2, 4, 11],
+              data: (function (){ this.liveService.getBitcoinEURPrice().subscribe(
+                (res: any) => {
+                  let obj = res.bpi;
+                  Object.keys(obj);
+                  for (let i in obj) {
+                    var euros = this.data.datasets[1].data.push(obj[i]);
+                  }
+                  return euros;
+                }
+              );
+            }),
             },
             {
               name: 'GBP',
               type: 'line',
-              data: [4, 7, 15],
+              data: (function (){ this.liveService.getBitcoinGBPPrice().subscribe(
+                (res: any) => {
+                  let obj = res.bpi;
+                  Object.keys(obj);
+                  for (let i in obj) {
+                    var libras = this.data.datasets[2].data.push(obj[i]);
+                  }
+                  return libras;
+                }
+              );
+            }),
             },
+          
           ],
         };
       });
-    }
-  
+    }     
+
     ngOnDestroy(): void {
       this.themeSubscription.unsubscribe();
     }
