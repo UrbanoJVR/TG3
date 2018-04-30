@@ -24,6 +24,9 @@ export class EchartsLiveComponent {
         const echarts: any = config.variables.echarts;   
      
         this.options = {
+          title:{
+            text: "Live Echarts"
+          },
           backgroundColor: echarts.bg,
           color: [colors.danger, colors.primary, colors.info],
           tooltip: {
@@ -31,7 +34,7 @@ export class EchartsLiveComponent {
             formatter: '{a} <br/>{b} : {c}',
           },
           legend: {
-            left: 'left',
+            center: 'center',
             data: ['USD', 'EUR', 'GBP'],
             textStyle: {
               color: echarts.textColor,
