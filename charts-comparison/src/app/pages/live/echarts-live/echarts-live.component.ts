@@ -78,10 +78,10 @@ export class EchartsLiveComponent {
         color: [colors.danger, colors.primary, colors.info],
         tooltip: {
           trigger: 'axis',
-          formatter: '{a} <br/>{b} : {c}',
         },
         legend: {
           left: 'center',
+          top: 25,
           data: ['USD', 'EUR', 'GBP']
         },
 
@@ -115,6 +115,7 @@ export class EchartsLiveComponent {
           {
             name: 'USD',
             type: 'line',
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
             data: this.USDdata,
             markPoint : {
               data : [
@@ -126,6 +127,7 @@ export class EchartsLiveComponent {
           {
             name: 'EUR',
             type: 'line',
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
             data: this.EURdata,
             markLine : {
               data : [
@@ -136,6 +138,7 @@ export class EchartsLiveComponent {
           {
             name: 'GBP',
             type: 'line',
+            itemStyle: {normal: {areaStyle: {type: 'default'}}},
             data: this.GBPdata,
           },
         ],
