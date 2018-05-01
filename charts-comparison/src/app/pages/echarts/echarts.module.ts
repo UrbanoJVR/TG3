@@ -12,6 +12,7 @@ import { EchartsLineComponent } from './echarts-line.component';
 import { EchartsMultipleXaxisComponent } from './echarts-multiple-xaxis.component';
 import { EchartsPieComponent } from './echarts-pie.component';
 import { EchartsRadarComponent } from './echarts-radar.component';
+import { EchartsTreeComponent } from './echarts-tree.component'
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { EchartsRadarComponent } from './echarts-radar.component';
     EchartsMultipleXaxisComponent,
     EchartsPieComponent,
     EchartsRadarComponent,
+    EchartsTreeComponent,
   ]
 })
 export class EchartsModule { }
