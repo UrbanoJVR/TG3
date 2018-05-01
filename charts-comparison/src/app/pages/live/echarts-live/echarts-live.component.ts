@@ -20,14 +20,14 @@ export class EchartsLiveComponent {
 
   constructor(private theme: NbThemeService, private liveService: LiveService, private changeDetectorRef: ChangeDetectorRef, ) {
 
-    // Para detectar cambios en la vista cada segundo
+    // Para detectar cambios en la vista cada 5 segundos
     this.changeDetectorRef.detach();
     setInterval(() => {
       if (!this.changeDetectorRef['destroyed']) {
         this.changeDetectorRef.detectChanges();
         this.ngAfterViewInit();
       }
-    }, 1000);
+    }, 5000);
 
     this.liveService.getBitcoinUSDPrice().subscribe(
       (res: any) => {
@@ -77,76 +77,61 @@ export class EchartsLiveComponent {
         backgroundColor: echarts.bg,
         color: [colors.danger, colors.primary, colors.info],
         tooltip: {
-          trigger: 'item',
+          trigger: 'axis',
           formatter: '{a} <br/>{b} : {c}',
         },
         legend: {
           left: 'center',
-          data: ['USD', 'EUR', 'GBP'],
-          textStyle: {
-            color: echarts.textColor,
-          },
+          data: ['USD', 'EUR', 'GBP']
         },
+
         xAxis: [
           {
             type: 'category',
             name: 'Last 31 days',
             nameLocation: 'center',
-            nameGap: 25,
+            nameGap: 40,
             data: this.labels,
-            axisTick: {
-              alignWithLabel: true,
-            },
-            axisLine: {
-              lineStyle: {
-                color: echarts.axisLineColor,
-              },
-            },
-            axisLabel: {
-              textStyle: {
-                color: echarts.textColor,
-              },
-            },
-          },
+            axisLabel : {
+              formatter: '{value}'
+          } 
+          }
         ],
         yAxis: [
           {
-            type: 'log',
+            type: 'value',
             name: 'Price',
             nameLocation: 'center',
-            nameGap: 25,
-            axisLine: {
-              lineStyle: {
-                color: echarts.axisLineColor,
-              },
-            },
-            splitLine: {
-              lineStyle: {
-                color: echarts.splitLineColor,
-              },
-            },
-            axisLabel: {
-              textStyle: {
-                color: echarts.textColor,
-              },
-            },
+            nameGap: 60,
           },
         ],
         grid: {
-          left: '2%',
-          right: '2%',
+          left: '5%',
+          right: '5%',
           containLabel: true,
+
         },
         series: [
           {
             name: 'USD',
             type: 'line',
             data: this.USDdata,
+            markPoint : {
+              data : [
+                  {type : 'max', name: 'max $'},
+                  {type : 'min', name: 'min $'}
+              ]
+          },
           },
           {
             name: 'EUR',
             type: 'line',
             data: this.EURdata,
+            markLine : {
+              data : [
+                  {type : 'average', name: 'media €'}
+              ]
+          }
           },
           {
             name: 'GBP',
@@ -163,4 +148,3 @@ export class EchartsLiveComponent {
   }
 
 }
-
